@@ -26,12 +26,11 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
+import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Listener;
-import org.eclipse.swt.widgets.Monitor;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableItem;
@@ -55,6 +54,7 @@ public class MainView {
 	final Combo c1;
 	private Button exe; 
 	private Button addNewIfScCd; 
+	private Button addFromExcel; 
 	private Button addRow; 
 	private Button delRow; 
 	private Button save; 
@@ -133,7 +133,6 @@ public class MainView {
 		addNewIfScCd.setText("구분코드 추가"); 
 		formData = new FormData();
 		formData.left = new FormAttachment(exe, 10);
-		formData.right = new FormAttachment(100, -5);
 		formData.top = new FormAttachment(0, 5);
 		formData.width = 100;
 		addNewIfScCd.setLayoutData(formData);
@@ -143,6 +142,22 @@ public class MainView {
 			}
 			
 		}); 
+		
+		addFromExcel = new Button(startGroup, SWT.PUSH); 
+		addFromExcel.setText("정의서 Upload"); 
+		formData = new FormData();
+		formData.left = new FormAttachment(addNewIfScCd, 10);
+		formData.right = new FormAttachment(100, -5);
+		formData.top = new FormAttachment(0, 5);
+		formData.width = 100;
+		addFromExcel.setLayoutData(formData);
+		addFromExcel.addSelectionListener(new SelectionAdapter(){ 
+			public void widgetSelected(SelectionEvent event) { 
+				String path = openFileDialog();
+				
+			}
+			
+		});
 		
 		viewer = new TableViewer(parent, SWT.H_SCROLL|SWT.V_SCROLL|SWT.FULL_SELECTION);
 		final String[] columnHeader = {"IF_SC_CD"
@@ -484,4 +499,11 @@ public class MainView {
 		viewer.setInput(inqury.selectAttrMt(tempList[0]));
 	} 
 
+	private String openFileDialog() {
+		// TODO Auto-generated method stub
+		FileDialog fDialog = new FileDialog(new Shell());
+		fDialog.setText("인터페이스 정의서 선택");
+		fDialog.setFilterExtensions(new String[] {"*.xlsx","*.xls"});
+		return fDialog.open();
+	}
 }
