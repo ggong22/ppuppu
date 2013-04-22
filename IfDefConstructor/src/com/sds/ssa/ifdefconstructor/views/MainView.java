@@ -1,7 +1,5 @@
 package com.sds.ssa.ifdefconstructor.views;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
@@ -38,6 +36,7 @@ import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.widgets.Text;
 
 import com.sds.ssa.ifdefconstructor.VO.AttrVO;
+import com.sds.ssa.ifdefconstructor.datatransaction.AttrTableDelete;
 import com.sds.ssa.ifdefconstructor.datatransaction.AttrTableInqury;
 import com.sds.ssa.ifdefconstructor.datatransaction.AttrTableModify;
 import com.sds.ssa.ifdefconstructor.labelprovider.AttrLabelProvider;
@@ -70,6 +69,7 @@ public class MainView {
 		
 		final Color delColor = new Color(null, 255,128,128);
 		final Color newColor = new Color(null, 254,243,107);
+		final Color modColor = new Color(null, 61,224,224);
 		final Color defaultColor = new Color(null, 255, 255, 255);
 		FormData formData = new FormData();
 		parent.setLayout(new FormLayout());
@@ -201,8 +201,8 @@ public class MainView {
 		formData = new FormData();
 		formData.left = new FormAttachment(1, -5);
 		formData.top = new FormAttachment(startGroup, 10);
+		formData.right = new FormAttachment(100, -20);
 		formData.height = 400;
-		formData.width = getTableWidth(bounds);
 		table.setLayoutData(formData);
 
 		final TableEditor editor = new TableEditor(table);
@@ -270,7 +270,7 @@ public class MainView {
 									String[] tempList = newText.split(" ", 2);
 									
 									if (!originText.equals(tempList[0])){
-										editor.getItem().setBackground(fIndex, newColor);
+										editor.getItem().setBackground(fIndex, modColor);
 									}
 									
 									editor.getItem().setText(fIndex, tempList[0]);
@@ -293,7 +293,7 @@ public class MainView {
 									String newText = text.getText();
 									if(null == originText){
 										if(null != newText){
-											editor.getItem().setBackground(fIndex, newColor);
+											editor.getItem().setBackground(fIndex, modColor);
 										}
 									}else if (!originText.equals(newText)){
 										editor.getItem().setBackground(fIndex, newColor);
@@ -327,7 +327,30 @@ public class MainView {
 			public void widgetSelected(SelectionEvent event) { 
 				int selectedIndex = table.getSelectionIndex();
 				TableItem item = table.getItem(selectedIndex);
+
 				TableItem lastItem = table.getItem(table.getItemCount()-1);
+				if(newColor.equals(item.getBackground(0))){
+					//새로 추가된 Row
+					item.setBackground(0, defaultColor);
+					item.setBackground(1, defaultColor);
+					//선택한 위치 이하의 라인 내용을 다시 옮기고
+					for(int i = selectedIndex ; i < table.getItemCount()-1 ; i++){
+						TableItem upItem = table.getItem(i);
+						TableItem downItem = table.getItem(i+1);
+						for(int j = 2; j < columnHeader.length ; j++){
+							upItem.setText(j, downItem.getText(j));
+							
+							if(!newColor.equals(downItem.getBackground(j))){
+								upItem.setBackground(j, downItem.getBackground(j));
+							}else{
+								upItem.setBackground(j, defaultColor);
+							}
+						}
+					}
+					table.remove(table.getItemCount()-1);
+					return;
+				}
+				
 				
 				item.setBackground(delColor);
 				if(!item.equals(lastItem)){
@@ -367,7 +390,11 @@ public class MainView {
 					TableItem downItem = table.getItem(i);
 					for(int j = 2; j < columnHeader.length ; j++){
 						downItem.setText(j, upItem.getText(j));
-						downItem.setBackground(j, newColor);
+						if(modColor.equals(upItem.getBackground(j))){
+							downItem.setBackground(j, modColor);
+						}else{
+							downItem.setBackground(j, newColor);
+						}
 					}
 				}
 				//빈 Row에 default값 넣어주기
@@ -407,15 +434,21 @@ public class MainView {
 		save.setLayoutData(formData);
 		save.addSelectionListener(new SelectionAdapter(){ 
 			public void widgetSelected(SelectionEvent event) { 
-				
+				int delCnt = 0;
 				List<AttrVO> modList = new ArrayList<AttrVO>();
 				//변경된 데이터 있는 지 체크
 				TableItem[] tableItems = table.getItems();
+				String ifScCd = "";
 				for(TableItem tableItem : tableItems){
 					for(int i = 0; i < columnHeader.length ; i++){
 						if(!defaultColor.equals(tableItem.getBackground(i))){
 							AttrVO attrVO = VOUtil.changeToAttrVO(tableItem);
 							modList.add(attrVO);
+							
+							if(delColor.equals(tableItem.getBackground(i))){
+								ifScCd = tableItem.getText(0);
+								delCnt++;
+							}
 							break;
 						}
 					}
@@ -423,27 +456,16 @@ public class MainView {
 				AttrTableModify modify = new AttrTableModify();
 				modify.updateAttrMt(modList);
 				
+				if(delCnt > 0){
+					AttrTableDelete delete = new AttrTableDelete();
+					delete.deleteAttrMt(ifScCd, delCnt);
+				}
+				
 				inquryData();
 			} 
 		});
 		
 		
-	}
-	
-	public int getTableWidth(int[] bounds){
-		int width = 0;
-		for(int w : bounds){
-			width += w;
-		}
-		
-		int minMonitor = Display.getCurrent().getMonitors()[0].getBounds().width;
-		for(Monitor monitor : Display.getCurrent().getMonitors()){
-			int currentWidth = monitor.getBounds().width;
-			if(minMonitor >= currentWidth){
-				minMonitor = currentWidth;
-			}
-		}
-		return minMonitor - 100;
 	}
 	
 	private void inquryData() {
