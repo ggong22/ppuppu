@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+
+   <extension
+         point="org.eclipse.ui.views">
+      <category
+            name="IfDefConstructor Category"
+            id="com.sds.ssa.IfDefConstructor">
+      </category>
+      <view
+            name="IfDefConstructor"
+            icon="icons/sample.gif"
+            category="com.sds.ssa.IfDefConstructor"
+            class="com.sds.ssa.ifdefconstructor.views.IfDefConstructorView"
+            id="com.sds.ssa.ifdefconstructor.views.IfDefConstructorView">
+      </view>
+   </extension>
+
+</plugin>

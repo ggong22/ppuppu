@@ -1,0 +1,5 @@
+SO SalesOrder 발행
+PO PurchaseOrder 발행
+CR SalesOrder Credit 발행
+FI FI직기표 발행
+CO 예산회계
