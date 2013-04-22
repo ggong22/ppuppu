@@ -9,5 +9,5 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.ui.console;bundle-version="3.5.100"
 Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
-Bundle-ClassPath: classes12.jar
+Bundle-ClassPath: lib/classes12.jar
 Bundle-Vendor: PLUGIN
