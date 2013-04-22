@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.EditingSupport;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TableViewerColumn;
@@ -31,6 +32,7 @@ import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Monitor;
+import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.widgets.Text;
@@ -122,7 +124,7 @@ public class MainView {
 		exe.setLayoutData(formData);
 		exe.addSelectionListener(new SelectionAdapter(){ 
 			public void widgetSelected(SelectionEvent event) { 
-				inquryData();
+				inquryData(parent);
 			}
 			
 		}); 
@@ -461,17 +463,24 @@ public class MainView {
 					delete.deleteAttrMt(ifScCd, delCnt);
 				}
 				
-				inquryData();
+				inquryData(parent);
 			} 
 		});
 		
 		
 	}
 	
-	private void inquryData() {
+	private void inquryData(Composite parent) {
 		AttrTableInqury inqury = new AttrTableInqury();
 		String param = c1.getText();
 		String[] tempList = param.split(" ", 2);
+		String ifScCd = tempList[0];
+		
+		if(null == ifScCd || "".equals(ifScCd)){
+			String dialogMessage = "인터페이스 구분을 선택하시오.";
+			MessageDialog.openWarning(null, "Warning", dialogMessage);
+			return;
+		}
 		viewer.setInput(inqury.selectAttrMt(tempList[0]));
 	} 
 
