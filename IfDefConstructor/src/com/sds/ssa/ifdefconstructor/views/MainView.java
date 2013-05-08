@@ -44,6 +44,7 @@ import com.sds.ssa.ifdefconstructor.labelprovider.AttrLabelProvider;
 import com.sds.ssa.ifdefconstructor.provider.AttrProvider;
 import com.sds.ssa.ifdefconstructor.util.FileIOUtil;
 import com.sds.ssa.ifdefconstructor.util.VOUtil;
+import com.sds.ssa.ifdefconstructor.fileUpload.FileUpload;
 
 public class MainView {
 	private Group startGroup; 
@@ -51,7 +52,7 @@ public class MainView {
 	private TableViewer viewer;
 	final Label l1;
 //	final Text t1; 
-	final Combo c1;
+	final Combo ifScCd;
 	private Button exe; 
 	private Button addNewIfScCd; 
 	private Button addFromExcel; 
@@ -91,17 +92,17 @@ public class MainView {
 		formData.top = new FormAttachment(0, 7);
 		l1.setLayoutData(formData);
 		
-		c1 = new Combo(startGroup, SWT.NONE | SWT.READ_ONLY);
+		ifScCd = new Combo(startGroup, SWT.NONE | SWT.READ_ONLY);
 		formData = new FormData();
 		formData.left = new FormAttachment(l1, 10);
 		formData.top = new FormAttachment(0, 5);
 		formData.width = 100;
-		c1.setLayoutData(formData);
+		ifScCd.setLayoutData(formData);
 		String[] comboData = IF_SC_CD;
 		for(String temp : comboData){
-			c1.add(temp);
+			ifScCd.add(temp);
 		}
-		c1.addSelectionListener(new SelectionListener() {
+		ifScCd.addSelectionListener(new SelectionListener() {
 			
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -118,7 +119,7 @@ public class MainView {
 		exe = new Button(startGroup, SWT.PUSH); 
 		exe.setText("조회"); 
 		formData = new FormData();
-		formData.left = new FormAttachment(c1, 10);
+		formData.left = new FormAttachment(ifScCd, 10);
 		formData.top = new FormAttachment(0, 5);
 		formData.width = 80;
 		exe.setLayoutData(formData);
@@ -152,11 +153,23 @@ public class MainView {
 		formData.width = 100;
 		addFromExcel.setLayoutData(formData);
 		addFromExcel.addSelectionListener(new SelectionAdapter(){ 
+			
 			public void widgetSelected(SelectionEvent event) { 
 				String path = openFileDialog();
 				
+				String param = ifScCd.getText();
+				String[] tempList = param.split(" ", 2);
+				String ifScCd = tempList[0];
+				
+				if(null == ifScCd || "".equals(ifScCd)){
+					String dialogMessage = "인터페이스 구분을 선택하시오.";
+					MessageDialog.openWarning(null, "Warning", dialogMessage);
+					return;
+				}
+				
+				FileUpload fileUpload = new FileUpload();
+				fileUpload.saveExcelToDB(path, ifScCd);	
 			}
-			
 		});
 		
 		viewer = new TableViewer(parent, SWT.H_SCROLL|SWT.V_SCROLL|SWT.FULL_SELECTION);
@@ -487,7 +500,7 @@ public class MainView {
 	
 	private void inquryData(Composite parent) {
 		AttrTableInqury inqury = new AttrTableInqury();
-		String param = c1.getText();
+		String param = ifScCd.getText();
 		String[] tempList = param.split(" ", 2);
 		String ifScCd = tempList[0];
 		
