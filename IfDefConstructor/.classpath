@@ -7,5 +7,6 @@
 	<classpathentry kind="con" path="org.eclipse.pde.core.requiredPlugins"/>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/Referenced Library"/>
+	<classpathentry kind="lib" path="D:/개인자료/SSA/org.eclipse.jdt.core_3.2.0.v_671.jar/org.eclipse.jdt.core_3.2.0.v_671.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

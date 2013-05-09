@@ -16,5 +16,13 @@
             id="com.sds.ssa.ifdefconstructor.views.IfDefConstructorView">
       </view>
    </extension>
+   <extension
+         point="org.eclipse.ui.preferencePages">
+      <page
+            class="com.sds.ssa.ifdefconstructor.preference.WorkbenchPreferencePage"
+            id="IfDefConstructor"
+            name="IfDefConstructor">
+      </page>
+   </extension>
 
 </plugin>

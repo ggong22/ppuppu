@@ -4,6 +4,10 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
+import org.eclipse.core.runtime.Plugin;
+
+import com.sds.ssa.ifdefconstructor.IfDefConstructorPlugin;
+
 public class DBConnectionService {
 	private Connection con = null;
 	
@@ -16,8 +20,10 @@ public class DBConnectionService {
 			Class.forName("oracle.jdbc.driver.OracleDriver");
 			
 	        System.out.println("드라이버 로딩 성공...");
-	        String url="jdbc:oracle:thin:@182.198.66.141:1621:cwwdbd1";
-	          
+	        String url= //"jdbc:oracle:thin:@182.198.66.141:1621:cwwdbd1";
+	       	IfDefConstructorPlugin.getDefault().getPluginPreferences().getString("DB"); 
+	        System.out.println(url);
+	        System.out.println(IfDefConstructorPlugin.getDefault().getPluginPreferences().getString("DB"));
 	        String user="IPMDEV";
 	        String pwd="dev";
 	          
