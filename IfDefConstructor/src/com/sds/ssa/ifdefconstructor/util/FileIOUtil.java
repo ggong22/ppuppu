@@ -11,6 +11,9 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.core.resources.IWorkspace;
+import org.eclipse.core.resources.IWorkspaceRoot;
+import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.FileLocator;
 import org.osgi.framework.Bundle;
 
@@ -24,6 +27,7 @@ public final class FileIOUtil {
 		List<CodeVO> rtnList = new ArrayList<>();
 	    Bundle bundle= IfDefConstructorPlugin.getDefault().getBundle();
 	    URL resource = null;
+
 		try {
 			switch (code) {
 				case "IF_SC_CD":
@@ -53,7 +57,8 @@ public final class FileIOUtil {
 				default:
 					break;
 			}
-			fr = new FileReader(new File(FileLocator.resolve(resource).toURI()));
+			
+			fr = new FileReader(new File(FileLocator.toFileURL(resource).getFile()));
 			BufferedReader br = new BufferedReader(fr);
 			
 			String line;
@@ -70,7 +75,7 @@ public final class FileIOUtil {
 			br.close();
 			fr.close();
 			
-		} catch (IOException | URISyntaxException e) {
+		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
@@ -100,7 +105,8 @@ public final class FileIOUtil {
 				default:
 					break;
 			}
-			fr = new FileReader(new File(FileLocator.resolve(resource).toURI()));
+			
+			fr = new FileReader(new File(FileLocator.toFileURL(resource).getFile()));
 			BufferedReader br = new BufferedReader(fr);
 			
 			String line;
@@ -117,7 +123,7 @@ public final class FileIOUtil {
 			for(int i = 0; i < rtnList.size() ; i++){
 				returnArr[i] = rtnList.get(i);
 			}
-		} catch (IOException | URISyntaxException e) {
+		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}

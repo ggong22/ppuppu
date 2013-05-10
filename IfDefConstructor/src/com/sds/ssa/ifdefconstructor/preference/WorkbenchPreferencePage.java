@@ -22,7 +22,7 @@ public class WorkbenchPreferencePage extends FieldEditorPreferencePage implement
 	public WorkbenchPreferencePage() {
 		super(GRID);
 		setPreferenceStore(IfDefConstructorPlugin.getDefault().getPreferenceStore());
-		setDescription("Set the DB invironment:");
+		setDescription("Set the DB environment:");
 	}
 	
 

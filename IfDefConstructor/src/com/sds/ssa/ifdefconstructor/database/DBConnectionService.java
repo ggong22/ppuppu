@@ -5,6 +5,7 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 import org.eclipse.core.runtime.Plugin;
+import org.eclipse.jface.dialogs.MessageDialog;
 
 import com.sds.ssa.ifdefconstructor.IfDefConstructorPlugin;
 
@@ -20,10 +21,14 @@ public class DBConnectionService {
 			Class.forName("oracle.jdbc.driver.OracleDriver");
 			
 	        System.out.println("드라이버 로딩 성공...");
-	        String url= //"jdbc:oracle:thin:@182.198.66.141:1621:cwwdbd1";
+	        String url= //"jdbc:oracle:thin:@182.198.67.141:1621:cwwdbd1";
 	       	IfDefConstructorPlugin.getDefault().getPluginPreferences().getString("DB"); 
 	        System.out.println(url);
-	        System.out.println(IfDefConstructorPlugin.getDefault().getPluginPreferences().getString("DB"));
+	        if(null == url || "".equals(url)){
+	        	String dialogMessage = "Window-Preferences-IfDefConstructor 에서 올바른DB 정보를 입력하세요. \n (ex. jdbc:oracle:thin:@1XX.XXX.XXX.XXX:1XX1:ABCD)";
+				MessageDialog.openWarning(null, "Warning", dialogMessage);
+				throw new Exception();
+	        }
 	        String user="IPMDEV";
 	        String pwd="dev";
 	          

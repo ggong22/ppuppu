@@ -44,7 +44,7 @@ import com.sds.ssa.ifdefconstructor.labelprovider.AttrLabelProvider;
 import com.sds.ssa.ifdefconstructor.provider.AttrProvider;
 import com.sds.ssa.ifdefconstructor.util.FileIOUtil;
 import com.sds.ssa.ifdefconstructor.util.VOUtil;
-import com.sds.ssa.ifdefconstructor.fileUpload.FileUpload;
+//import com.sds.ssa.ifdefconstructor.fileUpload.FileUpload;
 
 public class MainView {
 	private Group startGroup; 
@@ -167,8 +167,8 @@ public class MainView {
 					return;
 				}
 				
-				FileUpload fileUpload = new FileUpload();
-				fileUpload.saveExcelToDB(path, ifScCd);	
+//				FileUpload fileUpload = new FileUpload();
+//				fileUpload.saveExcelToDB(path, ifScCd);	
 			}
 		});
 		
@@ -232,7 +232,8 @@ public class MainView {
 		formData.left = new FormAttachment(1, -5);
 		formData.top = new FormAttachment(startGroup, 10);
 		formData.right = new FormAttachment(100, -20);
-		formData.height = 400;
+		formData.bottom = new FormAttachment(100, -40);
+//		formData.height = 400;
 		table.setLayoutData(formData);
 
 		final TableEditor editor = new TableEditor(table);
